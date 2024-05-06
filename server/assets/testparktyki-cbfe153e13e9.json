@@ -1,0 +1,15 @@
+{
+  "type": "service_account",
+  "project_id": "testparktyki",
+  "private_key_id": "cbfe153e13e9ef10f7e14fa2cd3fb1cf14b0153d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDkA7HG9SpBx1kj\nFVRFNz7UhHmEzwS3tFEWcHcEp0fcfJLxhq6Ol3K8IDAaVcvDgpZ/GFvA+0f1jiA3\nkUP8m3EyxVRSBORuPwf7BJtUnqyO61Ii2psXaG2Kj+SpIm6arZXfEg5RXp/UF9ll\nzmsiRkXut3C+ibUkjTScaHOKgz5iwqFTb2CHJJlAlP0O7i69jlLWQ28YbKiPYlbL\nofsK2v91nZc1zIBqecb962aoih/WgonZDb0M7uZTifyOocJOz5pmdUX+Ia6GI51S\n19g5ieCfgg1Lwk008lz4BsOdw/c+/9OXCHS3UB7whte1rUqgdZjYnX7rhR0g8MBS\nK01/DOxXAgMBAAECggEABmmtyYRO3yRVw9oI6xyip73e4EO/EWuaddPnHqDI/jdP\nhEhFbVbVFnVq5OxRm5R3DYJuq8uYoOj3/v59UWpA9/lhmOzwsvXfqfx3LrbhVr1H\nkhnHD65GmZ8MAoKPADEU0sriaQENF1BhM0ia7fVyaHeNGpuRr9via7bqvC3Bk2vY\nU1aPQFtFilvJzSHDzVSEv8K5CJoICfq/ctTEc834LA6Fo5op6zIEc+XsJrnmxwR7\nSDf/MFDnm8+P7VD193DHsK93ZcKJGljCEFy06vCVhyrg9gZV85SYy/eCOZ48fcY4\nzCkTaoSsJwihBCoiFAXm1dPSF/A/0PVYUMzEzXzgAQKBgQDzV9X5iCbc4cBU/hCm\nx+gkeqL5DeT1YSiyiuf1h2jLQHy6iruyKVXzypG+mpNWx48H3RqznF00lmGmBjbl\nhPd3oLvxsN4ySWRWzEoi3qHgAF7NAMElmmZIG6lzWzafOEBH1IxoE4Spvu2KdGBc\n5rE0qiusVRK0/yHVBdtwBMrwUwKBgQDv38EK7KQHJN5NDJefpAyPGM+vIox/9PL/\ns0CQxHFt7RZne/tfSbRRfXb7oZFatWMwOGICEByX+QzuE9mEgq9eH9dRWoz6AO7i\nl5z5oF1FUqMC1Yvvj03rATYCU2B+zXuFpqs4JAEyrdLZs066bRpwVIUqu3Rw2my+\nAAzdYunjbQKBgQDomtxxQsELQEutspHOKqZvQD7KXIqwN2hEilzBqOb16jWPxo81\n9Scw+0AndvBB8k15UdN1PpEldF3w6l3NNTWrxxwAInWykc703SA8hp0rVo9H3GHE\nBPuiD7cBCn6C4a0oPDbeQVH9RAEh6K43/1gCJGvMtiFEm+AGFSw1vo8R+wKBgQCQ\nhiHLMTTK0R3XEmUwXCjs9qf6/zfjyHO4OAoIrzMgZh5/jyWvDbtE9fEAPyJSosL2\nRKJYV9jCf92YfAEsY4jBjzGt5H7YCkPj5jE//az0nYt1o7BCT/dERmCCGjYjcC6i\nIf87PgYywKQvYmdmz2GEmIf7bSIE9LVb7K/Tm0sMKQKBgDKXb2QOM/2mNIdnxZPI\nQlvGzDbVfdZ+B/kWsDuTO1h2LIFjhuUROVUDPpkDIKv78CeI2HhOwCVEcmGNrbES\np693o4l0pF6oj0INkgglU8UtYRmaL/BTil2NL1ypGL+0kFcm1ug6jRcLCgfEuZdR\nQdz/laOgJWbm5fHIV752Y8pv\n-----END PRIVATE KEY-----\n",
+  "client_email": "jiratocalc@testparktyki.iam.gserviceaccount.com",
+  "client_id": "118070460246478925724",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/jiratocalc%40testparktyki.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com",
+  "id_klienta": "615444397538-ptjvo4crqqb6ovfuk9dktdq4rjqkb2dv.apps.googleusercontent.com",
+  "tajny_klucz_klienta": "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"
+}
