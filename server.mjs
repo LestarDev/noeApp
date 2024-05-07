@@ -78,9 +78,44 @@ const readFileXLS = (FILE_NAME) => {
     "CoreTimeActivity"
   ]];
 
+  let countEls = 1;
+
   xlData.forEach(el=>{
-    console.log(Object.values(el));
-    preperData.push(Object.values(el));
+    countEls++;
+    const tabToPush = Object.values(el);
+      if(Object.keys(el).length<32){
+        // console.log(Object.keys(el))
+        let j=0;
+        let iloscDodanych=0;
+        for(let i=0; i<32; i++){
+          if(Object.keys(el)[j]!=preperData[0][i]){
+            //Array.splice(start_position, 0, new_element...);
+            tabToPush.splice((j+iloscDodanych),0,"");
+            iloscDodanych++;
+            // console.log("Tab to push:",tabToPush);
+            // console.log(preperData[0][i])
+          }else{
+            j++;
+          }
+        }
+
+      }
+
+      tabToPush.splice(3, 1, `=TEXT(${tabToPush[3]},"DD-MM-YYYY")`);
+
+      tabToPush.splice(32, 5, 
+        `=FILTER('team-assignments-log'!$D$1:$D$299, 'team-assignments-log'!$A$1:$A$299 = F${countEls}, 'team-assignments-log'!$B$1:$B$299 <= D${countEls}, 'team-assignments-log'!$C$1:$C$299 >= D${countEls})`,
+        `=FILTER('contracts-log'!$M$1:$M$300, 'contracts-log'!$A$1:$A$300 = F${countEls}, 'contracts-log'!$B$1:$B$300 <= D${countEls}, 'contracts-log'!$C$1:$C$300 >= D${countEls})`,
+        `=IF(REGEXMATCH(I${countEls}, "Services -"),FILTER('role-assignments-log'!$F$1:$F$301, 'role-assignments-log'!$A$1:$A$301 = F${countEls},'role-assignments-log'!$E$1:$E$301 = I${countEls}, 'role-assignments-log'!$B$1:$B$301 <= D${countEls}, 'role-assignments-log'!$C$1:$C$301 >= D${countEls}), "-")`,
+        `=IF(AI${countEls}="-",0,FILTER('rates-log'!$F$1:$F$300, ('rates-log'!$E$1:$E$300 = AI${countEls}) + ('rates-log'!$E$1:$E$300 = "ANY"),'rates-log'!$A$1:$A$300 = I${countEls}, 'rates-log'!$B$1:$B$300 <= D${countEls}, 'rates-log'!$C$1:$C$300 >= D${countEls}))`,
+        `=IF(AI${countEls}="-",0,FILTER('rates-log'!$G$1:$G$300, ('rates-log'!$E$1:$E$300 = AI${countEls}) + ('rates-log'!$E$1:$E$300 = "ANY"),'rates-log'!$A$1:$A$300 = I${countEls}, 'rates-log'!$B$1:$B$300 <= D${countEls}, 'rates-log'!$C$1:$C$300 >= D${countEls}))`,
+        `=IF(AI${countEls}="-",0,FILTER('exchange-rates-log'!$C$1:$C$300, 'exchange-rates-log'!$B$1:$B$300 = AK${countEls}, MONTH('exchange-rates-log'!$A$1:$A$300) = MONTH(D${countEls}), YEAR('exchange-rates-log'!$A$1:$A$300) = YEAR(D${countEls})))`,
+        `=C${countEls}*AH${countEls}`,
+        `=AA${countEls}*AJ${countEls}*AL${countEls}`,
+        `=AN${countEls}-AM${countEls}`)
+
+      // console.log(Object.values(el));
+    preperData.push(tabToPush);
   })
   return preperData;
 }
@@ -132,47 +167,38 @@ const refreshAccessToken = async () => {
     })
   })
   const data = await response.json();
-  console.log(data);
+  // console.log("error:",data);
+  if(data.error_description== 'Token has been expired or revoked.'){
+    return generateAuthCode();
+  }
+  // fs.writeFileSync(tokenPath,JSON.stringify({}));
   return data.access_token;
 }
 
 const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
 
-  // console.log();
-
-  let isNewToken = false;
-
-  try{
-    console.log(jsonRefreshToken.expiry_date.toString());
-  }catch(e){
-    if(e.error_description== 'Token has been expired or revoked.'){
-      isNewToken=true;
-    }
-  }
-
-  let token;
-
-  if(isNewToken){
-     token = generateAuthCode();
-  }else{
-     token = await refreshAccessToken();
-  }
+ 
+     await refreshAccessToken().then( async (token)=>{
+      const response =  await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`,
+        {
+          method: "PUT",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          // body: SHEET_DATA
+          body: JSON.stringify({values: SHEET_DATA})
+        }
+      )
+    
+      console.log(response);
+     });
+     
+  
 
   // console.log(SHEET_DATA);
 
-  const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`,
-    {
-      method: "PUT",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      // body: SHEET_DATA
-      body: JSON.stringify({values: SHEET_DATA})
-    }
-  )
-
-  console.log(response);
+  
 
 }
