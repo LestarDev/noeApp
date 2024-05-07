@@ -25,8 +25,15 @@ const server = createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
   // const authClient = generateAuthCode();
-  
-  updatedSpreedSheet("1XuCS4bhdBPXXeg_IQX3K4MZR8AHbH3FKjT03F59jYIw", readFileXLS('server/assets/Overview Raport_2024-04-01_2024-04-30.xls'));
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+
+  rl.question("Type sheet link: ",(link)=>{
+    const startsWithID = link.substring(39);
+    updatedSpreedSheet(startsWithID.split('/')[0], readFileXLS('server/assets/Overview Raport_2024-04-01_2024-04-30.xls'));
+  })
 });
 
 const readFileXLS = (FILE_NAME) => {
@@ -153,7 +160,7 @@ const getNewToken = (oAuth2Client) => {
       if(err) return console.error("Error code/token", err);
       oAuth2Client.setCredentials(token);
       fs.writeFileSync(tokenPath,JSON.stringify(token));
-      console.log("Token has been saved");
+      console.log("Token has been saved, refresh app");
     })
   })
 
@@ -205,7 +212,9 @@ const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
         }
       )
     
-      console.log(response);
+      if(response.statusText=='OK'){
+        console.log("Wszystko przebieglo pomyslnie");
+      }
      });
      
   
