@@ -117,6 +117,19 @@ const readFileXLS = (FILE_NAME) => {
       // console.log(Object.values(el));
     preperData.push(tabToPush);
   })
+
+  preperData[0].push(
+    "Team",
+    "Hourly Cost",
+    "Role (for the Account)",
+    "Hourly Rate",
+    "Hourly Rate Currency",
+    "Currency To PLN",
+    "Net Cost",
+    "Net Revenue",
+    "Net Income/Loss"
+  );
+
   return preperData;
 }
 
