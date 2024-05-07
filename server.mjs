@@ -5,6 +5,8 @@ import readline from "readline"
 import fs from "fs"
 import jsonRefreshToken from "./server/assets/token.json" with { type: "json" }
 import config from "./server/config.json" with { type: "json" }
+import pkg from 'xlsx';
+const { readFile, utils } = pkg;
 
 const hostname = '127.0.0.1';
 const port = 5174;
@@ -23,8 +25,65 @@ const server = createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
   // const authClient = generateAuthCode();
-  updatedSpreedSheet("1XuCS4bhdBPXXeg_IQX3K4MZR8AHbH3FKjT03F59jYIw");
+  
+  updatedSpreedSheet("1XuCS4bhdBPXXeg_IQX3K4MZR8AHbH3FKjT03F59jYIw", readFileXLS('server/assets/Overview Raport_2024-04-01_2024-04-30.xls'));
 });
+
+const readFileXLS = (FILE_NAME) => {
+  const workBook = readFile(FILE_NAME);
+  const sheet_name_list = workBook.SheetNames;
+  const xlData = utils.sheet_to_json(workBook.Sheets[sheet_name_list[0]]);
+  // console.log(Object.values(xlData));
+  // return Object.values(xlData);
+  // const result = Object.keys(xlData).forEach((key) => {
+  //   console.log(key)
+  //   // [key, Object.values(xlData[key])]
+  // })
+  // const result = Object.keys(xlData).map((key) => {
+  //   [Object.values(xlData[key])]
+  // });
+
+  const preperData = [[
+    "Issue Key",
+    "Issue summary",
+    "Hours",
+    "Work date",
+    "Username",	
+    "Full name",
+    "Period",
+    "Account Key",
+    "Account Name",
+    "Account Lead",
+    "Account Category",
+    "Account Customer",
+    "Activity Name",
+    "Component",
+    "All Components",
+    "Version Name",
+    "Issue Type",
+    "Issue Status",
+    "Project Key",
+    "Project Name",
+    "Epic",
+    "Epic Link",
+    "Work Description",
+    "Parent Key",
+    "Reporter",
+    "External Hours",
+    "Billed Hours",
+    "Issue Original Estimate",
+    "Issue Remaining Estimate",
+    "Location Name",
+    "CoreTime",
+    "CoreTimeActivity"
+  ]];
+
+  xlData.forEach(el=>{
+    console.log(Object.values(el));
+    preperData.push(Object.values(el));
+  })
+  return preperData;
+}
 
 
 const getNewToken = (oAuth2Client) => {
@@ -77,11 +136,7 @@ const refreshAccessToken = async () => {
   return data.access_token;
 }
 
-const updatedSpreedSheet = async (SPREADSHEET_ID) => {
-  const sheetData = [
-    ['a',0],
-    [0,'b']
-  ]
+const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
 
   // console.log();
 
@@ -103,17 +158,18 @@ const updatedSpreedSheet = async (SPREADSHEET_ID) => {
      token = await refreshAccessToken();
   }
 
-  console.log(token);
+  // console.log(SHEET_DATA);
 
   const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:E?valueInputOption=USER_ENTERED`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`,
     {
       method: "PUT",
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({values: sheetData})
+      // body: SHEET_DATA
+      body: JSON.stringify({values: SHEET_DATA})
     }
   )
 
