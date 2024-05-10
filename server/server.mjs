@@ -14,11 +14,14 @@ const port = 5174;
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
 const tokenPath = "server/assets/token.json";
 
+const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
+
 const server = createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   // console.log(req);
-    res.end('Hello World');
+
+  res.end(req.url.substring(7).split('&')[0] ?? "");
   
 });
 
@@ -30,9 +33,16 @@ server.listen(port, hostname, () => {
     output: process.stdout
   })
 
+  try{
+    readFileXLS(XLS_FILE_PATH);
+  }catch(e){
+    console.log("Wrong path to XLS file in assets");
+    return;
+  }
+
   rl.question("Type sheet link: ",(link)=>{
     const startsWithID = link.substring(39);
-    updatedSpreedSheet(startsWithID.split('/')[0], readFileXLS('server/assets/Overview Raport_2024-04-01_2024-04-30.xls'));
+    updatedSpreedSheet(startsWithID.split('/')[0], readFileXLS(XLS_FILE_PATH));
   })
 });
 
