@@ -18,7 +18,7 @@ const tokenPath = "server/assets/token.json";
 const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
 
 const SPREAD_LINK = argv[2] ?? ""
-const SPREAD_SHEET = argv[2].split('#gid=')[1] ?? "0"
+const SPREAD_SHEET = (argv[2] ?? "0").split('#gid=')[1] ?? "0" 
 
 const server = createServer((req, res) => {
   res.statusCode = 200;

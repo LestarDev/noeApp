@@ -1,10 +1,9 @@
 import { createServer } from 'node:http';
 import jsonData from "./assets/testparktyki-cbfe153e13e9.json" with { type: "json" };
-import { google } from 'googleapis'
-import readline from "readline"
-import fs from "fs"
-import jsonRefreshToken from "./assets/token.json" with { type: "json" }
-import config from "./config.json" with { type: "json" }
+import { google } from 'googleapis';
+import readline from "readline";
+import fs from "fs";
+import jsonRefreshToken from "./assets/token.json" with { type: "json" };
 import pkg from 'xlsx';
 import { argv } from 'node:process'
 const { readFile, utils } = pkg;
@@ -18,7 +17,11 @@ const tokenPath = "server/assets/token.json";
 const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
 
 const SPREAD_LINK = argv[2] ?? ""
-const SPREAD_SHEET = argv[2].split('#gid=')[1] ?? "0"
+const SPREAD_SHEET = (argv[2] ?? "0").split('#gid=')[1] ?? "0"
+
+// argv.forEach((val, index)=>{
+//   console.log(index, val)
+// })
 
 const server = createServer((req, res) => {
   res.statusCode = 200;
@@ -178,6 +181,7 @@ const getNewToken = (oAuth2Client) => {
       oAuth2Client.setCredentials(token);
       fs.writeFileSync(tokenPath,JSON.stringify(token));
       console.log("Token has been saved, refresh app");
+      updatedSpreedSheet(SPREAD_LINK.substring(39).split('/')[0], readFileXLS(XLS_FILE_PATH));
     })
   })
 
@@ -208,14 +212,14 @@ const refreshAccessToken = async () => {
   if(data.error_description== 'Token has been expired or revoked.'){
     return generateAuthCode();
   }
-  // fs.writeFileSync(tokenPath,JSON.stringify({}));
   return data.access_token;
 }
 
 const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
-
+    // console.log("SPREADSHEET_ID:",SPREADSHEET_ID);
  
      await refreshAccessToken().then( async (token)=>{
+      if(!token) return;
       console.log("Wprowadzanie danych...")
       const response =  await fetch(
         SPREAD_SHEET=="0" ? 
@@ -233,7 +237,7 @@ const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
       )
     
       if(response.statusText=='OK'){
-        console.log("Wszystko przebieglo pomyslnie");
+        console.log("Everything was put succesfully");
       }else{
         console.log("ERROR!",response)
       }
