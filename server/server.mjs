@@ -17,9 +17,8 @@ const tokenPath = "server/assets/token.json";
 
 const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
 
-argv.forEach((val, index)=>{
-  console.log(index, val);
-})
+const SPREAD_LINK = argv[2] ?? ""
+const SPREAD_SHEET = argv[2].split('#gid=')[1] ?? "0"
 
 const server = createServer((req, res) => {
   res.statusCode = 200;
@@ -45,10 +44,13 @@ server.listen(port, hostname, () => {
     return;
   }
 
-  rl.question("Type sheet link: ",(link)=>{
+  SPREAD_LINK=="" 
+  ? rl.question("Type sheet link: ",(link)=>{
     const startsWithID = link.substring(39);
     updatedSpreedSheet(startsWithID.split('/')[0], readFileXLS(XLS_FILE_PATH));
   })
+  : updatedSpreedSheet(SPREAD_LINK.substring(39).split('/')[0], readFileXLS(XLS_FILE_PATH));
+
 });
 
 const readFileXLS = (FILE_NAME) => {
@@ -214,8 +216,11 @@ const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
 
  
      await refreshAccessToken().then( async (token)=>{
+      console.log("Wprowadzanie danych...")
       const response =  await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`,
+        SPREAD_SHEET=="0" ? 
+        `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`
+        : `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/sheets/${SPREAD_SHEET}/values/A1:AX?valueInputOption=USER_ENTERED`,
         {
           method: "PUT",
           headers: {
@@ -229,6 +234,8 @@ const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
     
       if(response.statusText=='OK'){
         console.log("Wszystko przebieglo pomyslnie");
+      }else{
+        console.log("ERROR!",response)
       }
      });
      
