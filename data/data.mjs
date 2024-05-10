@@ -116,7 +116,7 @@ const updatedSpreedSheet = async (SPREADSHEET_ID) => {
 
       const linkToFetch = SPREAD_SHEET=="0" ? 
       `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?valueInputOption=USER_ENTERED`
-      : `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SPREAD_SHEET=="" ? `'${SPREAD_SHEET}'!` : ""}A1:AX?valueInputOption=USER_ENTERED`;
+      : `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SPREAD_SHEET!="" ? `'${SPREAD_SHEET}'!` : ""}A1:AX?valueInputOption=USER_ENTERED`;
       
       console.log("linkToFecth: ",linkToFetch)
 
