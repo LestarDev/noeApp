@@ -1,9 +1,9 @@
 import { createServer } from 'node:http';
-import jsonData from "./assets/testparktyki-cbfe153e13e9.json" with { type: "json" };
+import jsonData from "./../assets/testparktyki-cbfe153e13e9.json" with { type: "json" };
 import { google } from 'googleapis';
 import readline from "readline";
 import fs from "fs";
-import jsonRefreshToken from "./assets/token.json" with { type: "json" };
+import jsonRefreshToken from "./../assets/token.json" with { type: "json" };
 import pkg from 'xlsx';
 import { argv } from 'node:process'
 const { readFile, utils } = pkg;
@@ -12,9 +12,9 @@ const hostname = '127.0.0.1';
 const port = 5174;
 
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
-const tokenPath = "server/assets/token.json";
+const tokenPath = "assets/token.json";
 
-const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
+const XLS_FILE_PATH = 'assets/Overview Raport_2024-04-01_2024-04-30.xls';
 
 const SPREAD_LINK = argv[2] ?? ""
 const SPREAD_SHEET = (argv[2] ?? "0").split('#gid=')[1] ?? "0"
@@ -218,6 +218,8 @@ const refreshAccessToken = async () => {
 const updatedSpreedSheet = async (SPREADSHEET_ID, SHEET_DATA) => {
     // console.log("SPREADSHEET_ID:",SPREADSHEET_ID);
  
+    console.log( SHEET_DATA)
+
      await refreshAccessToken().then( async (token)=>{
       if(!token) return;
       console.log("Wprowadzanie danych...")

@@ -10,4 +10,6 @@ done
 
 echo ""
 
-NODE_NO_WARNINGS=1  node server/server.mjs $data --no-warnings
+node data/data.mjs $data
+
+# NODE_NO_WARNINGS=1  node data/data.mjs $data --no-warnings
