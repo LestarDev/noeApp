@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /usr/bin/env node --no-warnings
 
 var="";
 data=""
@@ -6,7 +6,8 @@ data=""
 for var in "$@"
 do
     data=($data" $var")
-    echo "$var"
 done
 
-node server/server.mjs $data --no-warnings
+echo ""
+
+NODE_NO_WARNINGS=1  node server/server.mjs $data --no-warnings
