@@ -1,10 +1,10 @@
 import { createServer } from 'node:http';
-import jsonData from "./server/assets/testparktyki-cbfe153e13e9.json" with { type: "json" };
+import jsonData from "./assets/testparktyki-cbfe153e13e9.json" with { type: "json" };
 import { google } from 'googleapis'
 import readline from "readline"
 import fs from "fs"
-import jsonRefreshToken from "./server/assets/token.json" with { type: "json" }
-import config from "./server/config.json" with { type: "json" }
+import jsonRefreshToken from "./assets/token.json" with { type: "json" }
+import config from "./config.json" with { type: "json" }
 import pkg from 'xlsx';
 const { readFile, utils } = pkg;
 
