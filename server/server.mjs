@@ -6,6 +6,7 @@ import fs from "fs"
 import jsonRefreshToken from "./assets/token.json" with { type: "json" }
 import config from "./config.json" with { type: "json" }
 import pkg from 'xlsx';
+import { argv } from 'node:process'
 const { readFile, utils } = pkg;
 
 const hostname = '127.0.0.1';
@@ -15,6 +16,10 @@ const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
 const tokenPath = "server/assets/token.json";
 
 const XLS_FILE_PATH = 'server/assets/Overview Raport_2024-04-01_2024-04-30.xls';
+
+argv.forEach((val, index)=>{
+  console.log(index, val);
+})
 
 const server = createServer((req, res) => {
   res.statusCode = 200;
