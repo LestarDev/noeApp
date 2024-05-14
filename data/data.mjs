@@ -43,9 +43,9 @@ server.listen(port, hostname, () => {
   SPREAD_LINK=="" 
   ? rl.question("Type sheet link: ",(link)=>{
     const startsWithID = link.substring(39);
-    updatedSpreedSheet(startsWithID.split('/')[0]);
+    getSpreedSheetToUpdated(startsWithID.split('/')[0]);
   })
-  : updatedSpreedSheet(SPREAD_LINK.substring(39).split('/')[0]);
+  : getSpreedSheetToUpdated(SPREAD_LINK.substring(39).split('/')[0]);
 
 });
 
@@ -109,12 +109,14 @@ function csvToObjects(csv) {
     const csvRows = csv.split("\n");
     const propertyNames = csvSplit(csvRows[0]);
     let objects = [];
-    for (let i = 1, max = csvRows.length; i < max; i++) {
+    for (let i = 0, max = csvRows.length; i < max; i++) {
       let thisObject = {};
       let row = csvSplit(csvRows[i]);
       for (let j = 0, max = row.length; j < max; j++) {
+        // console.log(`${i}, ${j}:`,row[j])
         thisObject[propertyNames[j]] = row[j];
       }
+      // console.log(thisObject);
       objects.push(thisObject);
     }
     return objects;
@@ -145,8 +147,9 @@ const getSpreedSheetToUpdated = async (SPREADSHEET_ID) => {
             //   body: JSON.stringify({values: valuesData, insertDataOption: "insertDataOption"})
             }
           ).then(response=>response.text()).then((data)=>{
-            console.log(data);
+            // console.log(data);
 
+            let sheetLinesCount = 1;
 
             const csvToObj = csvToObjects(data);
 
@@ -155,21 +158,25 @@ const getSpreedSheetToUpdated = async (SPREADSHEET_ID) => {
             const preperTabToReturn = [];
 
             csvToObj.forEach(el=>{
+              sheetLinesCount++;
               preperTabToReturn.push(Object.values(el));
             })
 
-            preperTabToReturn.forEach(el=>{
-              el.reverse();
-            })
+            // preperTabToReturn.forEach(el=>{
+            //   el.reverse();
+            // })
 
-            console.log(preperTabToReturn);
-
+            
             currencys.forEach(el=>{
-              // preperTabToReturn
+              preperTabToReturn.push([`${new Date().toISOString().split('T')[0]}`,el,`=IF(B${sheetLinesCount}="PLN",1,INDEX(GOOGLEFINANCE(CONCATENATE("CURRENCY:",B${sheetLinesCount},"PLN"), "close", DATE(SPLIT(A${sheetLinesCount},"-",FALSE,TRUE), MID(A${sheetLinesCount},6,2),MID(A${sheetLinesCount},9,2))), 2, 2))`])
+              sheetLinesCount++;
             })
             
+            updatedSpreedSheet(SPREADSHEET_ID, preperTabToReturn);
+
+            // return preperTabToReturn;
+            // console.log(preperTabToReturn);
           })
-        
         
     })
 
@@ -177,19 +184,20 @@ const getSpreedSheetToUpdated = async (SPREADSHEET_ID) => {
 
 }
 
-const updatedSpreedSheet = async (SPREADSHEET_ID) => {
+const updatedSpreedSheet = async (SPREADSHEET_ID, SPREAD_SHEET_DATA) => {
     console.log("SPREADSHEET_ID:",SPREADSHEET_ID);
 
-    getSpreedSheetToUpdated(SPREADSHEET_ID);
-    return;
+    console.log(SPREAD_SHEET_DATA);
+
+    // const dataToPush = await getSpreedSheetToUpdated(SPREADSHEET_ID);
+    // return;
      await refreshAccessToken().then( async (token)=>{
       if(!token) return;
       console.log("Wprowadzanie danych...")
 
-        const valuesData = [
-            ["x","y", 8],
-            ["y", "x", 5],
-        ]
+      // console.log(dataToPush);
+
+        const valuesData = SPREAD_SHEET_DATA;
 
     //   const linkToFetch = SPREAD_SHEET=="0" ? 
     //   `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:AX?insertDataOption=INSERT_ROWS&valueInputOption=USER_ENTERED`
@@ -208,7 +216,7 @@ const updatedSpreedSheet = async (SPREADSHEET_ID) => {
             'Content-Type': 'application/json'
           },
           // body: SHEET_DATA
-          body: JSON.stringify({values: valuesData, insertDataOption: "insertDataOption"})
+          body: JSON.stringify({values: valuesData})
         }
       )
     
