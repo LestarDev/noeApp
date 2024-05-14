@@ -16,8 +16,11 @@ const tokenPath = "assets/token.json";
 const SPREAD_LINK = argv[2] ?? ""
 const SPREAD_SHEET = argv[3] ?? ""
 
+const currencys = [];
+
 argv.forEach((val, index)=>{
   console.log(index, val)
+  if(index>3) currencys.push(val);
 })
 
 const server = createServer((req, res) => {
@@ -142,8 +145,28 @@ const getSpreedSheetToUpdated = async (SPREADSHEET_ID) => {
             //   body: JSON.stringify({values: valuesData, insertDataOption: "insertDataOption"})
             }
           ).then(response=>response.text()).then((data)=>{
-            console.log(csvToObjects(data));
-            // console.log(data);
+            console.log(data);
+
+
+            const csvToObj = csvToObjects(data);
+
+            // console.log(csvToObj);
+
+            const preperTabToReturn = [];
+
+            csvToObj.forEach(el=>{
+              preperTabToReturn.push(Object.values(el));
+            })
+
+            preperTabToReturn.forEach(el=>{
+              el.reverse();
+            })
+
+            console.log(preperTabToReturn);
+
+            currencys.forEach(el=>{
+              // preperTabToReturn
+            })
             
           })
         
